@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML TO PDF CONVERTER</title>
+	
+<!-- Enable tablet/mobile/handheld device view -->	
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--example from link reference :->
+<!-- https://www.w3schools.com/icons/tryit.asp?filename=tryicons_fa-download -->
+<!-- https://www.w3schools.com/icons/tryit.asp?filename=tryicons_fa-print -->
+<!-- https://www.w3schools.com/icons/tryit.asp?filename=tryicons_fa-plus-circle -->
+<!-- https://www.w3schools.com/icons/tryit.asp?filename=tryicons_fa-minus-circle -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- HTML TO PDF CONVERTER AND SAVE IN LOCAL DIRECTORY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
+
+<!-- external link to jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+
+
+
+body {
+	margin					: 0px;
+  	background				: rgb(82, 86, 89);
+}
+
+page {
+	z-index					: 60;
+  	background				: white;
+  	display					: block;
+  	margin					: 0px auto;
+  	margin-bottom			: 0.5cm;
+  	box-shadow				: 0 0 0.5cm rgba(0,0,0,0.5);
+  	overflow					: hidden;
+}
+
+page[size="A4"] {  
+  	z-index					:	70; 
+	position					:	relative;
+	padding					:	10px;
+	background-color 		:	white;
+	/* Position of page on top. The navigation bar should not touch the page. There should be should space between the two . */
+	top						:  47px;
+	bottom					: 	10px;			/* Bottom position of page on body*/	
+	width						: 	21cm;			/* The width of the page */
+	height					:  29.7cm;
+	color 					: 	black;		/* The color of the text inside the div */
+	margin-top 				: 	1px;		
+	margin-bottom			:  5px;
+}
+
+
+#navbar {
+	/* z-index help us to manage elements easily. 
+		Assigning higher z-index value to the element will reside/dominate over elements with lower z-index.
+		
+		The z-index works only on positioned elements(position:absolute, position:relative, or position:fixed)
+	*/
+	z-index					:	30; 
+	/* Position has to be included and assign value if z-index is included in css */						
+	position					: fixed;				/* after navigation bar slides down it should remain till next action is performed */
+  	background-color		: #333; 
+  	top						: -50px;				/* top position of navigation bar */
+  	 
+  	width						: 100%;				/* cover entire width of body */
+  	display					: block;				/* mode of display */
+  	transition				: top 0.3s;			/* time for display of navigation bar */
+}
+
+#navbar i{
+ 	top						: 6px;			/*top spacing of icons*/
+	width						: 25px;        /* each width of icon */
+	height					: 30px;
+	padding					: 3px;
+	float						: right; 		/* positioning download and print icon on the right side of the navigation bar */
+  	right						: 20px;			/* assigning space from the right for navigationbar icons */
+  	position 				: relative;
+  	display					: block;
+  	z-index					: 40;
+ }
+ 
+
+
+#navbar i:hover {
+	border-radius			: 18px;					/* round/circle shape impact on mouse over icon*/
+	border 					: 2px solid white;	/* color of circle and its thickness */
+	width						: 18px;					/* width of circle */
+	height					: 18px;					/* height of circle */
+  	background-color		: red;					/* color inside circle */
+}
+
+div#navbar >i{
+	margin 					:0px 5px 0px;			/*right left space between two icons */
+	font-size				:20px;
+	text-align				:center;
+	color						:white
+}
+
+page > div#myPorcha {
+	padding-top				: 20px;
+	padding-left 			: 50px;
+	padding-right			: 50px;
+	padding-bottom			: 50px;
+}
+
+div#sideBar i{	
+	z-index					: 50;
+	position					: fixed;
+   right						: -100px;
+   width						: 100px;
+   color						: white;
+   font-size				: 48px;
+}
+
+/*For visibility of zoom icons*/
+@keyframes movein {
+	from{right:-100px;}
+   to {right:7px; }
+}
+
+/*For invisibility of zoom icons*/
+@keyframes moveout {
+	from{right:7px;}
+   to {right:-100px; }
+}
+
+#zoomIn{
+	top:500px;
+}
+
+#zoomOut{
+	top:550px;
+}
+
+
+/*Removes date, time and title from page*/
+@page { 
+	size              	: 0px auto;
+}
+
+@page :first {
+  margin-top: -50px;										/*top margin in print preview*/
+}
+
+@page :right {
+  margin: -0.1in -0.2in;								/*vertical and horizontal right align preview in print preview*/
+}
+
+
+@media print{	  	
+  	/*align page on the right side. Set single page preview */
+  	page{  
+  		size					: 0px auto;
+  		margin				: 0mm;		
+  		display				: inline;
+  		background-color	: white;  		
+  	}
+  	
+  	 
+} 
+
+/* For mobile phones: */
+[class*="col-"] {
+    width: 100%;
+}
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    
+    .col-m-3 {width: 25%;}
+    
+    .col-m-12 {width: 100%;}
+}
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    
+    .col-3 {width: 25%;}
+    
+    .col-12 {width: 100%;}
+}
+
+/*Tablet/Mobile/handheld view 
+@media only screen and (max-width: 768px){
+	
+    
+	body{
+		margin				: 0px auto;
+		background-color	: coral;		
+	}
+	
+	page{
+		display				: inline;
+		margin				: 0px auto; 
+		top					: -100px;		
+		width					: 98%; 
+		height				: 400px; 		
+		padding				: 0%; 
+		line-height			: 1.2em;	
+	} 
+	
+	page div#myPorcha{
+		padding-top			: 0%;
+		padding-left 		: 5%;
+		padding-right		: 5%;
+		padding-bottom		: 5%;
+		font-size			:0.9em;		
+	}  */
+		
+}
+
+</style>
+</head>
+<body>
+<div id="navbar">	
+	<i class="fa fa-print" id = "print" ></i> 
+	<i class="fa fa-download" id = "download" ></i>
+</div>
+
+<div id="sideBar">
+	<i id = "zoomIn" class="fa fa-plus-circle"> </i>	
+	<i id = "zoomOut" class="fa fa-minus-circle"></i>
+</div>
+<page size="A4" class='col-3 col-m-12'>
+	<div id="myPorcha">
+	The noble families of the Montagues and the Capulets live in the city of Verona. They had an argument, and were enemies. Their servants were enemies as well. The young men who work for the Montagues and the Capulets get into gangs and fight each other in the street. Because it is fashionable to carry a sword, sometimes they get badly injured.</br></br></br>Verona is ruled by Prince Escalus. He tells the Montagues and the Capulets that they have to stop fighting or they will be punished. It is very difficult to control the young men. Montague has only one child, a teenage boy called Romeo. Capulet also has only one child, a beautiful 14-year-old daughter called Juliet. They do not know each other, because Juliet never goes anywhere without her nursemaid. Romeo and his friends go to a masked ball at the home of Juliet's parents. Romeo and Juliet meet at a party and fall in love.</br></br></br>Because they think they will get into trouble with their parents, they tried to hide their love by not talking about it at home. Juliet knows that her parents wanted her to marry a cousin of the prince.  Romeo and Juliet get married in secret. Because of their secret marriage, a lot of things happen which bring about many deaths, including, finally, Romeo and Juliet kill themselves.
+	</div>	
+</page>
+
+<script>
+
+//I made changes in below link for my convenient and need
+//https://www.w3schools.com/howto/howto_js_navbar_slide.asp
+//https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_navbar_slide
+
+
+//I got the hover function from below and made some changes
+//https://www.w3schools.com/jquery/jquery_events.asp
+//https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_hover
+$(document).ready(function(){
+    $("page").hover(function(){
+    		$('#navbar').css('top', '-50px');
+    		$("#sidebar> i").css({"animation-name": "moveout", "animation-duration": "0.5s", "animation-timing-function": "ease", "animation-iteration-count": "1", "animation-fill-mode": "backwards"});   
+    },
+    function(){
+         $("#navbar").css('top',  "0px");
+         $("#sidebar> i").css({"animation-name": "movein", "animation-duration": "0.5s", "animation-timing-function": "ease", "animation-iteration-count": "1", "animation-fill-mode": "forwards"});  
+    }); 
+    
+    //Print the content on event click
+    $('#print').on('click', function(){
+    	//zoom icons were visible in the pdf preview
+    	//then i added this line of code to remove it
+    	//from the preview
+    	$("#sidebar> i").removeAttr('style');
+    	//preview and print or save in pdf
+		window.print(); 
+	});
+	
+	//save to pdf in local disk
+	function html2Pdf(){	
+		//p for portrait, mm stands for milimeter, it is a measurement unit and a4 is Paper size of type A4
+		var doc = new jsPDF("p", "mm", "a4");						
+		doc.addHTML($('page'),  function() {
+  			doc.save('story.pdf');
+		});	
+	}
+	
+	//Save content as pdf in local directory on click event
+	$('#download').on('click', function(){
+		html2Pdf();
+	});
+	
+	//set font size variable
+	var size = 1.0;
+	//on click of plus icon font size increases
+	$('#zoomIn').on('click', function(){
+		$('#myPorcha').animate({'zoom': size += 0.1}, 'slow');
+	});
+	
+	//on click of minus icon font size decreases
+	$('#zoomOut').on('click', function(){
+		$('#myPorcha').animate({'zoom': size -= 0.1}, 'slow');
+	});
+});
+</script>
+
+</body>
+</html>
